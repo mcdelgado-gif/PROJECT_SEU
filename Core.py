@@ -1,6 +1,6 @@
 '''
 Classes to create/edit and draw chracters or objects to the screen.
-Subject to future change but just and idea
+Subject to future change but just an idea
 '''
 class Character():
     def __init__(self):
