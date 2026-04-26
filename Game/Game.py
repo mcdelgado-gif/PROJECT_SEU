@@ -7,24 +7,24 @@ bg = (50,130,200)
 clock = pygame.time.Clock()
 #cursor
 pygame.mouse.set_visible(False)
-Curor_nutural = pygame.image.load("img/Cursor/Press (static).png")
-Curorgrab = pygame.image.load("img/Cursor/Grab (static).png")
+Curor_nutural = pygame.image.load("Game/img/Cursor/Press (static).png")
+Curorgrab = pygame.image.load("Game/img/Cursor/Grab (static).png")
 
 Curorgrab = pygame.transform.scale_by(Curorgrab,1.5)
 Curor_nutural = pygame.transform.scale_by(Curor_nutural,1.5)
 
 #music
-grab_sfx = pygame.mixer.Sound('Sound/grab.mp3')
-drop_sfx = pygame.mixer.Sound('Sound/Sample_0017.wav')
-sfx_1 = pygame.mixer.Sound('Sound/Sample_0014.wav')
-sfx_2 = pygame.mixer.Sound('Sound/Sample_0015.wav')
+grab_sfx = pygame.mixer.Sound('Game\Sound\grab.mp3')
+drop_sfx = pygame.mixer.Sound('Game\Sound/Sample_0017.wav')
+sfx_1 = pygame.mixer.Sound('Game\Sound/Sample_0014.wav')
+sfx_2 = pygame.mixer.Sound('Game\Sound/Sample_0015.wav')
 
 
 screen = pygame.display.set_mode((500, 500))
 player = pygame.Rect((300,100,50,100))
 
-Spritesheet_imgae = pygame.image.load("img/sprite_sheet.png").convert_alpha()
-katmari = pygame.image.load("img/grab.png").convert_alpha()
+Spritesheet_imgae = pygame.image.load("Game/img/sprite_sheet.png").convert_alpha()
+katmari = pygame.image.load("Game/img/grab.png").convert_alpha()
 collision_mask = pygame.mask.from_surface(katmari)
 katmari = pygame.transform.scale_by(katmari,1.4)
 
@@ -34,7 +34,7 @@ pick_rec = pygame.Surface((165,150)).convert_alpha()
 test_rect= pick_rec.get_rect(midtop=(Player_location))
 
 
-idle = pygame.image.load("img/spritesheet.png").convert_alpha()
+idle = pygame.image.load("Game/img/spritesheet.png").convert_alpha()
 idle_rec =pygame.Surface((130,200)).convert_alpha()
 collision = idle_rec.get_rect(midtop=(100,30),width=130,height=100)
 
