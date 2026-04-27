@@ -1,6 +1,7 @@
 import pygame
 pygame.init()
 
+Eaten = False
 
 bg = (50,130,200)
 clock = pygame.time.Clock()
@@ -177,9 +178,8 @@ while True:
                Grab_Player = False
 
         if collision_food.colliderect(collision):
-            eat_sfx.play()
             Eaten = True
-            idle_rotate = 0
+        
         
         if event.type == pygame.MOUSEMOTION:
            if Grab_food == True:
