@@ -48,6 +48,7 @@ idle.set_alpha(255)
 walk.set_alpha(0)
 #-----------------------------playermovment cordinates
 X,Y = 0,0
+Cords = (X,Y)
 # -------------------sprite incriments
 idle_rotate = 0
 idle_ani = 394
@@ -97,8 +98,8 @@ while True:
         #---------------------------------------------------------------- Walk, WASD
         if event.type == pygame.KEYDOWN:
            if event.key == pygame.K_w:
-              up = True
               walk_state = True
+              up = True
               walk_sfx.play()
 
         if event.type == pygame.KEYUP:
@@ -109,8 +110,8 @@ while True:
 
         if event.type == pygame.KEYDOWN:
            if event.key == pygame.K_s:
-              down =True
               walk_state = True
+              down =True
               walk_sfx.play()
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_s:
@@ -163,7 +164,7 @@ while True:
             Grabed = False
     
 
-    X += 10
+   
 
     x,y = pygame.mouse.get_pos()
     
@@ -201,13 +202,6 @@ while True:
     
     pick_rec.blit(katmari,(-180,-65),(w,0,430,1000))
     screen.blit(pick_rec,test_rect)
-    #--------------------------------------------------------------------------------------walk_logic_2
-    if idle_rotate == 0:
-        X+=10
-        print(X)
-   
-
-
     #----------------------------------------------------------walk logic
     if walk_state == True:
        if Grabed ==  False:
@@ -234,6 +228,8 @@ while True:
        collision.y -= 10
        collision_walk.y -= 10
        
+    def get_target():
+       idle_rotate +=10
 
 
 
