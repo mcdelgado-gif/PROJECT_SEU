@@ -18,9 +18,9 @@ walk_sfx = pygame.mixer.Sound('Game\Sound\walk.mp3')
 drop_sfx = pygame.mixer.Sound('Game\Sound\Sample_0017.wav')
 sfx_1 = pygame.mixer.Sound('Game\Sound\Sample_0014.wav')
 sfx_2 = pygame.mixer.Sound('Game\Sound\Sample_0015.wav')
+eat_sfx = pygame.mixer.Sound('Game\Sound\Yum_Eat.mp3')
 
-
-screen = pygame.display.set_mode((500, 500))
+screen = pygame.display.set_mode((800, 800))
 player = pygame.Rect((300,100,50,100))
 
 Spritesheet_imgae = pygame.image.load("Game\img\sprite_sheet.png").convert_alpha()
@@ -35,20 +35,28 @@ test_rect= pick_rec.get_rect(midtop=(Player_location))
 
 idle = pygame.image.load("Game\img\spritesheet.png").convert_alpha()
 idle_rec =pygame.Surface((130,200)).convert_alpha()
-collision = idle_rec.get_rect(midtop=(100,30),width=130,height=100)
+collision = idle_rec.get_rect(center=(400,400),width=130,height=100)
 # -------------------------------------------------------------------------walk surfaces
-walk = pygame.Surface((165,150)).convert_alpha()
+walk_sur = pygame.Surface((165,150)).convert_alpha()
 walk = pygame.image.load("Game\img\walk.png").convert_alpha()
 walk_rec =pygame.Surface((130,200)).convert_alpha()
-collision_walk = walk_rec.get_rect(midtop=(100,20),width=130,height=100)
+collision_walk = walk_rec.get_rect(midtop=(400,300),width=130,height=100)
 
 
 katmari.set_alpha(0)
 idle.set_alpha(255)
 walk.set_alpha(0)
-#-----------------------------playermovment cordinates
-X,Y = 0,0
-Cords = (X,Y)
+
+#-----------------------------Food = YUMMYYY
+Food = pygame.image.load("Game\img\Cursor\Food\Salad.png").convert_alpha()
+Food = pygame.transform.scale_by(Food,0.1)
+Food_rec =pygame.Surface((85,80)).convert_alpha()
+F= 198
+C = 113
+food_cords = (F,C)
+collision_food = Food_rec.get_rect(midbottom=(F,C),width=130,height=100)
+
+
 # -------------------sprite incriments
 idle_rotate = 0
 idle_ani = 394
@@ -58,6 +66,9 @@ walk_state = False
 rotate_Right = False
 rotate_left =False
 Grabed = False
+Grab_food = False
+Grab_Player = False
+Eaten = False
 
 left = False
 Right = False
@@ -69,8 +80,9 @@ while True:
     
     screen.fill(bg)
     pick_rec.fill((0,0,0,0))
-    idle_rec.fill((0,0,0,0))
+    idle_rec.fill((0,255,0,0))
     walk_rec.fill((0,0,0,0))
+    Food_rec.fill((0,255,255,0))
     #---------------------------------------------------- Exit App
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -143,25 +155,48 @@ while True:
              walk_state = False
              left = False
              walk_sfx.stop()
-             
+        
+        
+
+
         #---------------------------------------------------------------Grab/Mouse Controls
         if event.type == pygame.MOUSEBUTTONDOWN:
+            Grabed = True
             Curorgrab.set_alpha(255)
+            Curor_nutural.set_alpha(0)
+
             if collision.collidepoint(x,y):
                 print("Click")
                 sfx_1.play()
-                Grabed = True
+                Grab_Player = True
                 grab_sfx.play()
+
+            if collision_food.collidepoint(x,y):
+               print("YES")
+               Grab_food = True
+               Grab_Player = False
+
+        if collision_food.colliderect(collision):
+            eat_sfx.play()
+            Eaten = True
+            idle_rotate = 0
+        
         if event.type == pygame.MOUSEMOTION:
-           if Grabed == True:
+           if Grab_food == True:
+               collision_food.move_ip(event.rel)
+           if Grab_Player == True:
             collision.move_ip(event.rel)
             collision_walk.move_ip(event.rel)
+
+        
         
         if event.type == pygame.MOUSEBUTTONUP:
             print("Released")
             sfx_2.play()
             drop_sfx.play()
             Grabed = False
+            Grab_food = False
+            Grab_Player = False
     
 
    
@@ -170,13 +205,17 @@ while True:
     
     
 
-
+    
     #------------------------------------------------------------------idle
     idle_rec.blit(idle,(-130,0),(idle_ani,idle_rotate,250, 3616))
     screen.blit(idle_rec,collision)
     #------------------------------------------------------------------walk
     walk_rec.blit(walk,(-130,0),(idle_ani,idle_rotate,250, 3616))
     screen.blit(walk_rec,collision_walk)
+    #------------------------------------------------------------------food
+    if Eaten == False:
+        screen.blit(Food_rec,collision_food)
+        screen.blit(Food,collision_food)
     
     #-----------------------------------------------------------------Rotation animation logic
     if rotate_Right == True:
@@ -228,26 +267,28 @@ while True:
        collision.y -= 10
        collision_walk.y -= 10
        
-    def get_target():
-       idle_rotate +=10
+
 
 
 
     #-------------------------------------------------------------------------Grab Logic
     if Grabed == True:
-       test_rect.x = x -86
-       test_rect.y = y
-       katmari.set_alpha(255)
-       idle.set_alpha(0)
-       Curor_nutural.set_alpha(0)
-       idle_rotate = 0
-    
+       if Grab_Player == True:
+        test_rect.x = x -86
+        test_rect.y = y
+        katmari.set_alpha(255)
+        idle.set_alpha(0)
+        idle_rotate = 0
+        if Grab_food == True:
+            collision_food.x = x
+            collision_food.y = y
     else:
        grab_sfx.stop()
        katmari.set_alpha(0)
        
        Curorgrab.set_alpha(0)
        Curor_nutural.set_alpha(255)
+    
        
        
 
@@ -256,6 +297,6 @@ while True:
     screen.blit(Curorgrab,(x -15,y-10))
     
     
-    dt= clock.tick(30) 
+    dt= clock.tick(32) 
     pygame.display.update()
     pygame.display.flip()

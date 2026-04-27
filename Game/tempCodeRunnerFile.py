@@ -1,4 +1,4 @@
-
-       Curor_nutural.set_alpha(0)
-       idle_rotate = 0
-    
+    if Grab_food == True:
+            Grab_Player = False
+            collision_food.x = x
+            collision_food.y = y
