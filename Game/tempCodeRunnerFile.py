@@ -1,1 +1,1 @@
-Eaten = False
+screen = pygame.display.set_mode((800, 800))

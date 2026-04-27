@@ -3,7 +3,6 @@ from SPrite import SpriteSheet
 pygame.init()
 
 
-
 bg = (50,130,200)
 clock = pygame.time.Clock()
 #-------------------------------------------------------------------------------cursor
@@ -77,7 +76,7 @@ Right = False
 up =False
 down = False
 
-
+example = SpriteSheet("Game\img/room concept.png")
 while True:
     
     screen.fill(bg)
@@ -295,7 +294,7 @@ while True:
        Curor_nutural.set_alpha(255)
     
        
-       
+    example.create_sprite(idle,200,200)
 
     
     screen.blit(Curor_nutural,(x -15,y-10))
