@@ -1,6 +1,4 @@
 import pygame
-from SPrite import SpriteSheet
-import math
 pygame.init()
 
 
@@ -48,10 +46,8 @@ collision_walk = walk_rec.get_rect(midtop=(100,20),width=130,height=100)
 katmari.set_alpha(0)
 idle.set_alpha(255)
 walk.set_alpha(0)
-#-----------------------------playermovment cordinateswwwwwwww
-collision.x,collision.y =(0,0)
-collision_walk.x,collision_walk.y =(0,0)
-Player_location = (100,30)
+#-----------------------------playermovment cordinates
+X,Y = 0,0
 # -------------------sprite incriments
 idle_rotate = 0
 idle_ani = 394
@@ -61,6 +57,11 @@ walk_state = False
 rotate_Right = False
 rotate_left =False
 Grabed = False
+
+left = False
+Right = False
+up =False
+down = False
 
 
 while True:
@@ -96,12 +97,50 @@ while True:
         #---------------------------------------------------------------- Walk, WASD
         if event.type == pygame.KEYDOWN:
            if event.key == pygame.K_w:
+              up = True
               walk_state = True
               walk_sfx.play()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
+             up = False
              walk_state = False
+             walk_sfx.stop()
+
+        if event.type == pygame.KEYDOWN:
+           if event.key == pygame.K_s:
+              down =True
+              walk_state = True
+              walk_sfx.play()
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_s:
+             down = False
+             walk_state = False
+             walk_sfx.stop()
+
+        if event.type == pygame.KEYDOWN:
+           if event.key == pygame.K_a:
+              Right = True
+              walk_state = True
+              idle_rotate = 2486
+              walk_sfx.play()
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_a:
+             Right = False
+             walk_state = False
+             walk_sfx.stop()
+
+        
+        if event.type == pygame.KEYDOWN:
+           if event.key == pygame.K_d:
+              walk_state = True
+              left =True
+              
+              walk_sfx.play()
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_d:
+             walk_state = False
+             left = False
              walk_sfx.stop()
              
         #---------------------------------------------------------------Grab/Mouse Controls
@@ -124,7 +163,7 @@ while True:
             Grabed = False
     
 
-    
+    X += 10
 
     x,y = pygame.mouse.get_pos()
     
@@ -162,22 +201,39 @@ while True:
     
     pick_rec.blit(katmari,(-180,-65),(w,0,430,1000))
     screen.blit(pick_rec,test_rect)
-    #--------------------------------------------------------------------------------------walk_logic
-    print(idle_rotate)
+    #--------------------------------------------------------------------------------------walk_logic_2
+    if idle_rotate == 0:
+        X+=10
+        print(X)
+   
 
 
     #----------------------------------------------------------walk logic
     if walk_state == True:
        if Grabed ==  False:
-        collision_walk.y += 10
-        collision.y +=10
         walk.set_alpha(255)
         idle.set_alpha(0)
     else:
        walk.set_alpha(0)
        idle.set_alpha(255)
        
-
+    if left == True:
+        idle_rotate = 678
+        collision.x+=10
+        collision_walk.x +=10
+    if Right == True:
+        idle_rotate = 2486
+        collision.x -= 10
+        collision_walk.x -= 10
+    if down == True:
+       idle_rotate = 0
+       collision.y += 10
+       collision_walk.y += 10
+    if up == True:
+       idle_rotate = 1808
+       collision.y -= 10
+       collision_walk.y -= 10
+       
 
 
 
