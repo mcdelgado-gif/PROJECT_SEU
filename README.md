@@ -1,5 +1,5 @@
 #   Controls
-- LMB on Character to Grab
+- LMB to Grab Objetcs/Player
 - WASD to move 
 - Left and right arrow keys to rotate
 
