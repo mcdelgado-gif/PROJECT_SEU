@@ -4,10 +4,13 @@ class SpriteSheet():
     def __int__(self,image):
         self.sheet = image
 
-    
-    def get_image(self,frame,width,height,scale):
-        image = pygame.Surface((width,height)).convert_alpha()
-        image.blit(self.sheet,(0,0),((frame * width),0,width,height))
-        image = pygame.transform.scale(image,(width *scale, height *scale))
-        return image
-    
+    #take image
+    #create surface
+    #crate collision from surface
+    def create_sprite(self,w,h):
+        sprite = pygame.image.load(self.sheet)
+        surface = pygame.Surface((w,h)).convert_alpha()
+        collision = surface.get_rect(center=(400,400),width=130,height=100)
+        draw_sprite = surface.blit(sprite,(0,0),(0,0,250,3616))
+        draw_surface = screen.blit(surface,collision)
+        return draw_sprite,draw_surface

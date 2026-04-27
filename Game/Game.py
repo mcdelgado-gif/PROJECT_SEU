@@ -1,7 +1,8 @@
 import pygame
+from SPrite import SpriteSheet
 pygame.init()
 
-Eaten = False
+
 
 bg = (50,130,200)
 clock = pygame.time.Clock()
@@ -179,8 +180,6 @@ while True:
 
         if collision_food.colliderect(collision):
             Eaten = True
-        
-        
         if event.type == pygame.MOUSEMOTION:
            if Grab_food == True:
                collision_food.move_ip(event.rel)
@@ -251,16 +250,22 @@ while True:
        idle.set_alpha(255)
        
     if left == True:
-        idle_rotate = 678
-        collision.x+=10
-        collision_walk.x +=10
+        idle_rotate +=226
+        if idle_rotate >= 678:
+           idle_rotate = 678
+           collision.x+=10 
+           collision_walk.x +=10
     if Right == True:
-        idle_rotate = 2486
+        idle_rotate += 226
+        if idle_rotate >= 0:
+           idle_rotate = 2486
         collision.x -= 10
         collision_walk.x -= 10
     if down == True:
-       idle_rotate = 0
-       collision.y += 10
+       idle_rotate += 226
+       if idle_rotate >= 0:
+          idle_rotate = 0
+       collision.y += 10 
        collision_walk.y += 10
     if up == True:
        idle_rotate = 1808
