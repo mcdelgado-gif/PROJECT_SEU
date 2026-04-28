@@ -20,10 +20,10 @@ drop_sfx = pygame.mixer.Sound('Game\Sound\Sample_0017.wav')
 sfx_1 = pygame.mixer.Sound('Game\Sound\Sample_0014.wav')
 sfx_2 = pygame.mixer.Sound('Game\Sound\Sample_0015.wav')
 eat_sfx = pygame.mixer.Sound('Game\Sound\Yum_Eat.mp3')
-
+#---------------------------------------------------------Display Screen
 screen = pygame.display.set_mode((800, 800))
-player = pygame.Rect((300,100,50,100))
 
+#---------------------------------------------------------idle
 Spritesheet_imgae = pygame.image.load("Game\img\sprite_sheet.png").convert_alpha()
 katmari = pygame.image.load("Game\img\grab.png").convert_alpha()
 collision_mask = pygame.mask.from_surface(katmari)
@@ -31,10 +31,11 @@ katmari = pygame.transform.scale_by(katmari,1.4)
 
 Player_location = (100,30)
 #---------------------------------------------------------------------------pickup surfaces
+Player_location = (100,30)
 pick_rec = pygame.Surface((165,150)).convert_alpha()
 test_rect= pick_rec.get_rect(midtop=(Player_location))
 
-idle = pygame.image.load("Game\img\spritesheet.png").convert_alpha()
+idle_spritesheet = pygame.image.load("Game\img\spritesheet.png").convert_alpha()
 idle_rec =pygame.Surface((130,200)).convert_alpha()
 collision = idle_rec.get_rect(center=(400,400),width=130,height=100)
 # -------------------------------------------------------------------------walk surfaces
@@ -45,7 +46,7 @@ collision_walk = walk_rec.get_rect(midtop=(400,300),width=130,height=100)
 
 
 katmari.set_alpha(0)
-idle.set_alpha(255)
+idle_spritesheet.set_alpha(255)
 walk.set_alpha(0)
 
 #-----------------------------Food = YUMMYYY
@@ -76,10 +77,9 @@ Right = False
 up =False
 down = False
 
-example = SpriteSheet("Game\img/room concept.png")
+
 while True:
     
-    screen.fill(bg)
     pick_rec.fill((0,0,0,0))
     idle_rec.fill((0,255,0,0))
     walk_rec.fill((0,0,0,0))
@@ -201,11 +201,11 @@ while True:
 
     x,y = pygame.mouse.get_pos()
     
-    
+
 
     
     #------------------------------------------------------------------idle
-    idle_rec.blit(idle,(-130,0),(idle_ani,idle_rotate,250, 3616))
+    idle_rec.blit(idle_spritesheet,(-130,0),(idle_ani,idle_rotate,250, 3616))
     screen.blit(idle_rec,collision)
     #------------------------------------------------------------------walk
     walk_rec.blit(walk,(-130,0),(idle_ani,idle_rotate,250, 3616))
@@ -243,10 +243,10 @@ while True:
     if walk_state == True:
        if Grabed ==  False:
         walk.set_alpha(255)
-        idle.set_alpha(0)
+        idle_spritesheet.set_alpha(0)
     else:
        walk.set_alpha(0)
-       idle.set_alpha(255)
+       idle_spritesheet.set_alpha(255)
        
     if left == True:
         idle_rotate +=226
@@ -281,7 +281,7 @@ while True:
         test_rect.x = x -86
         test_rect.y = y
         katmari.set_alpha(255)
-        idle.set_alpha(0)
+        idle_spritesheet.set_alpha(0)
         idle_rotate = 0
         if Grab_food == True:
             collision_food.x = x
@@ -294,9 +294,9 @@ while True:
        Curor_nutural.set_alpha(255)
     
        
-    example.create_sprite(idle,200,200)
+   
 
-    
+    #--------------------------------------cursor
     screen.blit(Curor_nutural,(x -15,y-10))
     screen.blit(Curorgrab,(x -15,y-10))
     
