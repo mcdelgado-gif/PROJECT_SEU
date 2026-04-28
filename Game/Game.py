@@ -1,5 +1,5 @@
 import pygame
-from SPrite import SpriteSheet
+from SPrite import Player
 pygame.init()
 
 
@@ -77,9 +77,14 @@ Right = False
 up =False
 down = False
 
+Prince = Player("Game\img\grab.png")
+
+
 
 while True:
-    
+    screen.blit(Prince.load_sprite(),(0,0))
+
+
     pick_rec.fill((0,0,0,0))
     idle_rec.fill((0,255,0,0))
     walk_rec.fill((0,0,0,0))
@@ -201,7 +206,7 @@ while True:
 
     x,y = pygame.mouse.get_pos()
     
-
+    
 
     
     #------------------------------------------------------------------idle
@@ -299,8 +304,8 @@ while True:
     #--------------------------------------cursor
     screen.blit(Curor_nutural,(x -15,y-10))
     screen.blit(Curorgrab,(x -15,y-10))
-    
-    
+
+
     dt= clock.tick(32) 
     pygame.display.update()
     pygame.display.flip()
