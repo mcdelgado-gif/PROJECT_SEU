@@ -1,1 +1,1 @@
-screen = pygame.display.set_mode((800, 800))
+een.blit(Sup,(0,0))

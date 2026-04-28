@@ -77,14 +77,17 @@ Right = False
 up =False
 down = False
 
-Prince = Player("Game\img\grab.png")
-
+Prince = Player("Game\img\Cursor\Food\Salad.png",0.2)
+Pup = Prince.load_sprite()
+Sup = Prince.create_surface()
 
 
 while True:
-    screen.blit(Prince.load_sprite(),(0,0))
+    Sup.blit(Pup,(0,0))
+    screen.blit(Sup,(0,0))
 
 
+    
     pick_rec.fill((0,0,0,0))
     idle_rec.fill((0,255,0,0))
     walk_rec.fill((0,0,0,0))
@@ -207,7 +210,6 @@ while True:
     x,y = pygame.mouse.get_pos()
     
     
-
     
     #------------------------------------------------------------------idle
     idle_rec.blit(idle_spritesheet,(-130,0),(idle_ani,idle_rotate,250, 3616))
