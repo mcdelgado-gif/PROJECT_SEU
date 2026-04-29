@@ -77,15 +77,18 @@ Right = False
 up =False
 down = False
 
-Prince = Player("Game\img\Cursor\Food\Salad.png",0.2)
-Pup = Prince.load_sprite()
-Sup = Prince.create_surface()
+Prince = Player("Game\img\spritesheet.png",1)
+Prince_Sprite = Prince.load_sprite()
+Prince_Surface = Prince.create_surface()
 
 
+t =0
 while True:
-    Sup.blit(Pup,(0,0))
-    screen.blit(Sup,(0,0))
-
+    Animation = Prince.run_animation()
+    Prince_Surface.blit(Prince_Sprite,(-120,-30),(Animation,0,400,200))
+    screen.blit(Prince_Surface,(0,0))
+    Prince_Surface.fill((255,255,255))
+   
 
     
     pick_rec.fill((0,0,0,0))

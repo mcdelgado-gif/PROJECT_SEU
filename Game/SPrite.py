@@ -7,6 +7,9 @@ class Player:
         self.Image = Image
         self.scale = scale
         self.loaded_sprite = self.load_sprite()
+        self.starting_frame = 0
+        self.next_frame = 394
+        self.end_frame = 6304
 
 
 
@@ -22,6 +25,12 @@ class Player:
         x = Surface
 
         return x
-
+    def run_animation(self):
+        self.starting_frame += self.next_frame
+        if self.starting_frame == self.end_frame:
+            self.starting_frame = 0
+        return self.starting_frame
+        
+        
     
 
