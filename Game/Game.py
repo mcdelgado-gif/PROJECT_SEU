@@ -177,6 +177,7 @@ while True:
             sfx_2.play()
             drop_sfx.play()
             Grabed = False
+            Grab_Player = False
             Grab_food = False
 
 
