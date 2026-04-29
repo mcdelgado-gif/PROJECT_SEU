@@ -21,12 +21,7 @@ walk_state = False
 rotate_Right = False
 rotate_left =False
 Grabed = False
-Grab_Player = False
 Eaten = False
-up  = False
-down = False
-left = False
-Right = False
 #------------------------Sprites/Surfaces/Collision
 Prince = Player("Game\img\spritesheet.png",1)
 Prince_Sprite = Prince.load_sprite()
@@ -39,6 +34,10 @@ Prince_Grab.end_frame = 3861
 Grab_Sprite = Prince_Grab.load_sprite()
 Grab_Surface = Prince_Grab.create_surface(165,150)
 
+Prince_Walk = Player("Game\img\walk.png",1)
+Prince_w_sprite = Prince_Walk.load_sprite()
+walk_surface = Prince_Walk.create_surface(165,150)
+
 Cursor_natural = Player("Game\img\Cursor\Press (static).png",1.5)
 Cursor_Sprite = Cursor_natural.load_sprite()
 Cursor_Surface = Cursor_natural.create_surface(50,50)
@@ -46,6 +45,7 @@ Cursor_Surface = Cursor_natural.create_surface(50,50)
 Cur_Grab = Player("Game\img\Cursor\Grab (static).png",1.5)
 Cur_Grab_Sprite = Cur_Grab.load_sprite()
 Cur_Grab_Surface = Cur_Grab.create_surface(50,50)
+
 
 while True:
     x,y = pygame.mouse.get_pos()
@@ -75,23 +75,9 @@ while True:
        Cursor_Sprite.set_alpha(255)
        Cur_Grab_Sprite.set_alpha(0)
        Grab_Sprite.set_alpha(0)
-       Prince_Sprite.set_alpha(255)
        grab_sfx.stop()
        
        
-       keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        Prince_location.y -= 10
-        idle_rotate = 1568
-    if keys[pygame.K_s]:
-        Prince_location.y += 10
-        idle_rotate = 0
-    if keys[pygame.K_a]:
-        Prince_location.x -= 10
-        idle_rotate = 2486
-    if keys[pygame.K_d]:
-        Prince_location.x += 10
-        idle_rotate = 678
         
         
     Animation = Prince.run_animation()
@@ -104,7 +90,12 @@ while True:
     screen.blit(Grab_Surface,Prince_location)
     Grab_Surface.fill((0,0,0,0))
    
-   
+    walk_surface.blit(Prince_w_sprite,(-125,-30),(Animation,idle_rotate,400,200))
+    screen.blit(walk_surface,Prince_location)
+    walk_surface.fill((0,0,0,0))
+    Prince_w_sprite.set_alpha(0)
+
+
     Cur_Grab_Surface.blit(Cur_Grab_Sprite,(0,0))
     screen.blit(Cur_Grab_Surface,(x-10,y-10))
     cursor_Grab_location = Cursor_natural.collider(x-10 ,y-10,50,50)
@@ -114,6 +105,38 @@ while True:
     Cursor_Surface.blit(Cursor_Sprite,(0,0))
     screen.blit(Cursor_Surface,(x-10,y-10))
     cursor_location = Cursor_natural.collider(x-10 ,y-10,50,50)
+
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        Prince_location.y -= 10
+        idle_rotate = 1568
+        walk_state = True
+    if keys[pygame.K_s]:
+        Prince_location.y += 10
+        idle_rotate = 0
+        walk_state = True
+    if keys[pygame.K_a]:
+        Prince_location.x -= 10
+        idle_rotate = 2486
+        walk_state = True
+    if keys[pygame.K_d]:
+        Prince_location.x += 10
+        idle_rotate = 678
+        walk_state = True
+
+    if walk_state == True:
+        Prince_Sprite.set_alpha(0)
+        Prince_w_sprite.set_alpha(255)
+        walk_state = False
+    else:
+        Prince_w_sprite.set_alpha(0)
+        Prince_Sprite.set_alpha(255)
+
+
+
+
+
     
     #---------------------------------------------------- Exit App
     for event in pygame.event.get():
@@ -135,7 +158,19 @@ while True:
              rotate_Right = False
              print(rotate_Right)
         #---------------------------------------------------------------- Walk, WASD
-       
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                walk_sfx.play()
+            if event.key == pygame.K_a:
+                walk_sfx.play()
+            if event.key == pygame.K_s:
+                walk_sfx.play()
+            if event.key == pygame.K_d:
+                walk_sfx.play()
+        if event.type == pygame.KEYUP:
+                walk_sfx.stop()
+            
+    
         #---------------------------------------------------------------Grab/Mouse Controls
         if event.type == pygame.MOUSEBUTTONDOWN:
             Grabed = True
@@ -152,7 +187,7 @@ while True:
             drop_sfx.play()
             Grabed = False
             Grab_food = False
-            Grab_Player = False
+
 
     clock.tick(32) 
     pygame.display.update()
