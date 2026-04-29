@@ -21,6 +21,7 @@ walk_state = False
 rotate_Right = False
 rotate_left =False
 Grabed = False
+Grab_Player = False
 Eaten = False
 #------------------------Sprites/Surfaces/Collision
 Prince = Player("Game\img\spritesheet.png",1)
@@ -77,9 +78,6 @@ while True:
        Grab_Sprite.set_alpha(0)
        grab_sfx.stop()
        
-       
-        
-        
     Animation = Prince.run_animation()
     Prince_Surface.blit(Prince_Sprite,(-125,-30),(Animation,idle_rotate,400,200))
     screen.blit(Prince_Surface,Prince_location)
@@ -95,7 +93,6 @@ while True:
     walk_surface.fill((0,0,0,0))
     Prince_w_sprite.set_alpha(0)
 
-
     Cur_Grab_Surface.blit(Cur_Grab_Sprite,(0,0))
     screen.blit(Cur_Grab_Surface,(x-10,y-10))
     cursor_Grab_location = Cursor_natural.collider(x-10 ,y-10,50,50)
@@ -105,7 +102,6 @@ while True:
     Cursor_Surface.blit(Cursor_Sprite,(0,0))
     screen.blit(Cursor_Surface,(x-10,y-10))
     cursor_location = Cursor_natural.collider(x-10 ,y-10,50,50)
-
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
@@ -133,11 +129,6 @@ while True:
         Prince_w_sprite.set_alpha(0)
         Prince_Sprite.set_alpha(255)
 
-
-
-
-
-    
     #---------------------------------------------------- Exit App
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
