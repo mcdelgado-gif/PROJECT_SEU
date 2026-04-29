@@ -54,6 +54,7 @@ while True:
 #--------PLAYER Rotation---------
     if rotate_Right == True:
             idle_rotate += 226
+            print(idle_rotate)
     if rotate_left == True:
             if idle_rotate == 0:
                 idle_rotate = 3164
@@ -81,22 +82,18 @@ while True:
        keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         Prince_location.y -= 10
-        idle_rotate += 226
+        idle_rotate = 1568
     if keys[pygame.K_s]:
         Prince_location.y += 10
+        idle_rotate = 0
     if keys[pygame.K_a]:
         Prince_location.x -= 10
+        idle_rotate = 2486
     if keys[pygame.K_d]:
         Prince_location.x += 10
+        idle_rotate = 678
         
-
         
-
-
-          
-
-
-
     Animation = Prince.run_animation()
     Prince_Surface.blit(Prince_Sprite,(-125,-30),(Animation,idle_rotate,400,200))
     screen.blit(Prince_Surface,Prince_location)
