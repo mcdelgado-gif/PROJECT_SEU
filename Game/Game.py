@@ -1,5 +1,5 @@
 import pygame
-from SPrite import Player
+from SPrite import Player 
 pygame.init()
 
 
@@ -83,13 +83,35 @@ Prince_location = Prince.collider(100,80,130,80)
 Prince_Surface = Prince.create_surface()
 Animation = Prince.run_animation()
 
+
+
+
 t =0
 while True:
+
+    if rotate_Right == True:
+            idle_rotate += 226
+    if rotate_left == True:
+            if idle_rotate == 0:
+                idle_rotate = 3164
+            else:
+                idle_rotate -= 226
+    if idle_rotate == 3616:
+            idle_rotate = 0
+          
+
+
+
+
+
     Animation = Prince.run_animation()
-    Prince_Surface.blit(Prince_Sprite,(-125,-30),(Animation,0,400,200))
+    Prince_Surface.blit(Prince_Sprite,(-125,-30),(Animation,idle_rotate,400,200))
     screen.blit(Prince_Surface,Prince_location)
+    
+   
     Prince_Surface.fill((255,255,255))
    
+    
 
     
     pick_rec.fill((0,0,0,0))
@@ -103,22 +125,20 @@ while True:
         #---------------------------------------------------- Arrow Keys
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-             rotate_left = True
-             print("Released")
-
+                rotate_left = True
+                print(rotate_left)
+            if event.key == pygame.K_RIGHT:
+                rotate_Right = True
+                print(rotate_Right)
+    
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
              rotate_left = False
-             
-
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RIGHT:
-                rotate_Right =True
-                
-
-        if event.type == pygame.KEYUP:
+             print(rotate_left)
             if event.key == pygame.K_RIGHT:
              rotate_Right = False
+             print(rotate_Right)
+
              
         #---------------------------------------------------------------- Walk, WASD
 
@@ -200,14 +220,14 @@ while True:
             Grab_Player = False
     
 
-   
 
     x,y = pygame.mouse.get_pos()
     
-    
-    
+
+   
+
     #------------------------------------------------------------------idle
-    idle_rec.blit(idle_spritesheet,(-130,0),(idle_ani,idle_rotate,250, 3616))
+    idle_rec.blit(idle_spritesheet,(-130,0),(idle_ani,0,250, 3616))
     screen.blit(idle_rec,collision)
     #------------------------------------------------------------------walk
     walk_rec.blit(walk,(-130,0),(idle_ani,idle_rotate,250, 3616))
@@ -218,17 +238,7 @@ while True:
         screen.blit(Food,collision_food)
     
     #-----------------------------------------------------------------Rotation animation logic
-    if rotate_Right == True:
-        idle_rotate += 226
-    if rotate_left == True:
-        if idle_rotate == 0:
-         idle_rotate = 3164
-        else:
-         idle_rotate -= 226
-    if idle_rotate == 3616:
-        idle_rotate = 0
-
-    print(idle_rotate)
+    
     #--------------------------------------------------------------------idle_sprite animations
     idle_ani += 394
     if idle_ani == 6304:

@@ -1,1 +1,1 @@
- Prince_Surface.blit(Prince_Sprite,(-120,-30),(Animation,0,400,200))
+ Five = Rotation(rotate_Right,rotate_left)
