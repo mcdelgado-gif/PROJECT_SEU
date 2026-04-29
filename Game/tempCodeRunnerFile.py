@@ -1,2 +1,3 @@
- Cursor_Sprite.set_alpha(255)
-       Cur_Grab_Sprite.set_alpha(0)
+ Prince_location.y -=10
+             idle_rotate += 226
+             print(idle_rotate)
