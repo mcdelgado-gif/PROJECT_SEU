@@ -4,6 +4,7 @@ pygame.init()
 
 
 bg = (50,130,200)
+screen = pygame.display.set_mode((800, 800))
 clock = pygame.time.Clock()
 #-------------------------------------------------------------------------------cursor
 pygame.mouse.set_visible(False)
@@ -20,74 +21,39 @@ drop_sfx = pygame.mixer.Sound('Game\Sound\Sample_0017.wav')
 sfx_1 = pygame.mixer.Sound('Game\Sound\Sample_0014.wav')
 sfx_2 = pygame.mixer.Sound('Game\Sound\Sample_0015.wav')
 eat_sfx = pygame.mixer.Sound('Game\Sound\Yum_Eat.mp3')
-#---------------------------------------------------------Display Screen
-screen = pygame.display.set_mode((800, 800))
-
-#---------------------------------------------------------idle
-Spritesheet_imgae = pygame.image.load("Game\img\sprite_sheet.png").convert_alpha()
-katmari = pygame.image.load("Game\img\grab.png").convert_alpha()
-collision_mask = pygame.mask.from_surface(katmari)
-katmari = pygame.transform.scale_by(katmari,1.4)
-
-Player_location = (100,30)
-#---------------------------------------------------------------------------pickup surfaces
-Player_location = (100,30)
-pick_rec = pygame.Surface((165,150)).convert_alpha()
-test_rect= pick_rec.get_rect(midtop=(Player_location))
-
-idle_spritesheet = pygame.image.load("Game\img\spritesheet.png").convert_alpha()
-idle_rec =pygame.Surface((130,200)).convert_alpha()
-collision = idle_rec.get_rect(center=(400,400),width=130,height=100)
-# -------------------------------------------------------------------------walk surfaces
-walk_sur = pygame.Surface((165,150)).convert_alpha()
-walk = pygame.image.load("Game\img\walk.png").convert_alpha()
-walk_rec =pygame.Surface((130,200)).convert_alpha()
-collision_walk = walk_rec.get_rect(midtop=(400,300),width=130,height=100)
-
-
-katmari.set_alpha(0)
-idle_spritesheet.set_alpha(255)
-walk.set_alpha(0)
-
-#-----------------------------Food = YUMMYYY
-Food = pygame.image.load("Game\img\Cursor\Food\Salad.png").convert_alpha()
-Food = pygame.transform.scale_by(Food,0.1)
-Food_rec =pygame.Surface((85,80)).convert_alpha()
-F= 198
-C = 113
-food_cords = (F,C)
-collision_food = Food_rec.get_rect(midbottom=(F,C),width=130,height=100)
 
 
 # -------------------sprite incriments
 idle_rotate = 0
-idle_ani = 394
-w = 551.6
 #---------------------game states
 walk_state = False
 rotate_Right = False
 rotate_left =False
 Grabed = False
-Grab_food = False
 Grab_Player = False
 Eaten = False
-
-left = False
-Right = False
-up =False
-down = False
 
 Prince = Player("Game\img\spritesheet.png",1)
 Prince_Sprite = Prince.load_sprite()
 Prince_location = Prince.collider(100,80,130,80)
 Prince_Surface = Prince.create_surface()
-Animation = Prince.run_animation()
+
+Prince_Grab = Player("Game\img\grab.png",1.4)
+Prince_Grab.next_frame = 551.6
+Prince_Grab.end_frame = 3861
+Grab_Sprite = Prince_Grab.load_sprite()
+Grab_Surface = Prince_Grab.create_surface()
+Grab_location = Prince_Grab.collider(200,0,130,80)
+
 
 
 
 
 t =0
 while True:
+   
+    screen.fill((150,100,50))
+
 
     if rotate_Right == True:
             idle_rotate += 226
@@ -98,26 +64,45 @@ while True:
                 idle_rotate -= 226
     if idle_rotate == 3616:
             idle_rotate = 0
+
+
+    if Grabed == True:
+       if Grab_Player == True:
+        Prince_location.x = x - 86
+        Prince_location. y = y
+        Grab_Sprite.set_alpha(255)
+        Prince_Sprite.set_alpha(0)
+        idle_rotate = 0
+
+        
+    else:
+       Grab_Sprite.set_alpha(0)
+       Prince_Sprite.set_alpha(255)
+       grab_sfx.stop()
+       
+       Curorgrab.set_alpha(0)
+       Curor_nutural.set_alpha(255)
+    
           
-
-
 
 
 
     Animation = Prince.run_animation()
     Prince_Surface.blit(Prince_Sprite,(-125,-30),(Animation,idle_rotate,400,200))
     screen.blit(Prince_Surface,Prince_location)
+    Prince_Surface.fill((0,0,0,0))
     
-   
-    Prince_Surface.fill((255,255,255))
+    Grab_Animation = Prince_Grab.run_animation()
+    Grab_Surface.blit(Grab_Sprite,(-180,-65),(Grab_Animation,0,430,1000))
+    screen.blit(Grab_Surface,Prince_location)
+    Grab_Surface.fill((0,0,0,0))
    
     
 
     
-    pick_rec.fill((0,0,0,0))
-    idle_rec.fill((0,255,0,0))
-    walk_rec.fill((0,0,0,0))
-    Food_rec.fill((0,255,255,0))
+   
+  
+    
     #---------------------------------------------------- Exit App
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -189,28 +174,13 @@ while True:
             Curorgrab.set_alpha(255)
             Curor_nutural.set_alpha(0)
 
-            if collision.collidepoint(x,y):
+            if Prince_location.collidepoint(x,y):
                 print("Click")
                 sfx_1.play()
                 Grab_Player = True
                 grab_sfx.play()
 
-            if collision_food.collidepoint(x,y):
-               print("YES")
-               Grab_food = True
-               Grab_Player = False
-
-        if collision_food.colliderect(collision):
-            Eaten = True
-        if event.type == pygame.MOUSEMOTION:
-           if Grab_food == True:
-               collision_food.move_ip(event.rel)
-           if Grab_Player == True:
-            collision.move_ip(event.rel)
-            collision_walk.move_ip(event.rel)
-
-        
-        
+            
         if event.type == pygame.MOUSEBUTTONUP:
             print("Released")
             sfx_2.play()
@@ -223,96 +193,11 @@ while True:
 
     x,y = pygame.mouse.get_pos()
     
-
-   
-
-    #------------------------------------------------------------------idle
-    idle_rec.blit(idle_spritesheet,(-130,0),(idle_ani,0,250, 3616))
-    screen.blit(idle_rec,collision)
-    #------------------------------------------------------------------walk
-    walk_rec.blit(walk,(-130,0),(idle_ani,idle_rotate,250, 3616))
-    screen.blit(walk_rec,collision_walk)
-    #------------------------------------------------------------------food
-    if Eaten == False:
-        screen.blit(Food_rec,collision_food)
-        screen.blit(Food,collision_food)
-    
-    #-----------------------------------------------------------------Rotation animation logic
-    
-    #--------------------------------------------------------------------idle_sprite animations
-    idle_ani += 394
-    if idle_ani == 6304:
-        idle_ani = 394
-
-   #---------------------------------------------------------------------pickup animation
-    w += 551.6
-    if w >= 3861:
-        w = 551.6
-    
-    pick_rec.blit(katmari,(-180,-65),(w,0,430,1000))
-    screen.blit(pick_rec,test_rect)
-    #----------------------------------------------------------walk logic
-    if walk_state == True:
-       if Grabed ==  False:
-        walk.set_alpha(255)
-        idle_spritesheet.set_alpha(0)
-    else:
-       walk.set_alpha(0)
-       idle_spritesheet.set_alpha(255)
-       
-    if left == True:
-        idle_rotate +=226
-        if idle_rotate >= 678:
-           idle_rotate = 678
-           collision.x+=10 
-           collision_walk.x +=10
-    if Right == True:
-        idle_rotate += 226
-        if idle_rotate >= 0:
-           idle_rotate = 2486
-        collision.x -= 10
-        collision_walk.x -= 10
-    if down == True:
-       idle_rotate += 226
-       if idle_rotate >= 0:
-          idle_rotate = 0
-       collision.y += 10 
-       collision_walk.y += 10
-    if up == True:
-       idle_rotate = 1808
-       collision.y -= 10
-       collision_walk.y -= 10
-       
-
-
-
-
-    #-------------------------------------------------------------------------Grab Logic
-    if Grabed == True:
-       if Grab_Player == True:
-        test_rect.x = x -86
-        test_rect.y = y
-        katmari.set_alpha(255)
-        idle_spritesheet.set_alpha(0)
-        idle_rotate = 0
-        if Grab_food == True:
-            collision_food.x = x
-            collision_food.y = y
-    else:
-       grab_sfx.stop()
-       katmari.set_alpha(0)
-       
-       Curorgrab.set_alpha(0)
-       Curor_nutural.set_alpha(255)
-    
-       
-   
-
-    #--------------------------------------cursor
+#---------------------------------------------- cursor
     screen.blit(Curor_nutural,(x -15,y-10))
     screen.blit(Curorgrab,(x -15,y-10))
 
 
-    dt= clock.tick(32) 
+    clock.tick(32) 
     pygame.display.update()
     pygame.display.flip()

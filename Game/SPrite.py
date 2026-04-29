@@ -22,7 +22,7 @@ class Player:
        
         return Sprite
     def create_surface(self):
-        Surface = pygame.Surface((165,150))
+        Surface = pygame.Surface((165,150)).convert_alpha()
         Surface.fill((255,255,255))
         x = Surface
 
@@ -35,7 +35,7 @@ class Player:
 
     def run_animation(self):
         self.starting_frame += self.next_frame
-        if self.starting_frame == self.end_frame:
+        if self.starting_frame >= self.end_frame:
             self.starting_frame = 0
         return self.starting_frame
         
