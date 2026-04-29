@@ -3,12 +3,14 @@ pygame.init()
 
 class Player:
     def __init__(self,Image,scale):
+        w = 0
+        h = 0
         self.Grabbed = False
         self.Walking = False
         self.Image = Image
         self.scale = scale
         self.loaded_sprite = self.load_sprite()
-        self.sprite_surface = self.create_surface()
+        self.sprite_surface = self.create_surface(w,h)
         self.starting_frame = 0
         self.next_frame = 394
         self.end_frame = 6304
@@ -21,9 +23,8 @@ class Player:
         Sprite = pygame.transform.scale_by(Sprite,self.scale)
        
         return Sprite
-    def create_surface(self):
-        Surface = pygame.Surface((165,150)).convert_alpha()
-        Surface.fill((255,255,255))
+    def create_surface(self,w,h):
+        Surface = pygame.Surface((w,h)).convert_alpha()
         x = Surface
 
         return x

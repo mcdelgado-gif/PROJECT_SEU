@@ -8,12 +8,6 @@ screen = pygame.display.set_mode((800, 800))
 clock = pygame.time.Clock()
 #-------------------------------------------------------------------------------cursor
 pygame.mouse.set_visible(False)
-Curor_nutural = pygame.image.load("Game\img\Cursor\Press (static).png")
-Curorgrab = pygame.image.load("Game\img\Cursor\Grab (static).png")
-
-Curorgrab = pygame.transform.scale_by(Curorgrab,1.5)
-Curor_nutural = pygame.transform.scale_by(Curor_nutural,1.5)
-
 #--------------------------------------------------------------------------------music
 grab_sfx = pygame.mixer.Sound('Game\Sound\grab.mp3')
 walk_sfx = pygame.mixer.Sound('Game\Sound\walk.mp3')
@@ -36,24 +30,32 @@ Eaten = False
 Prince = Player("Game\img\spritesheet.png",1)
 Prince_Sprite = Prince.load_sprite()
 Prince_location = Prince.collider(100,80,130,80)
-Prince_Surface = Prince.create_surface()
+Prince_Surface = Prince.create_surface(165,150)
 
 Prince_Grab = Player("Game\img\grab.png",1.4)
 Prince_Grab.next_frame = 551.6
 Prince_Grab.end_frame = 3861
 Grab_Sprite = Prince_Grab.load_sprite()
-Grab_Surface = Prince_Grab.create_surface()
+Grab_Surface = Prince_Grab.create_surface(165,150)
 Grab_location = Prince_Grab.collider(200,0,130,80)
 
+Cursor_natural = Player("Game\img\Cursor\Press (static).png",1.5)
+Cursor_Sprite = Cursor_natural.load_sprite()
+Cursor_Surface = Cursor_natural.create_surface(50,50)
+
+Cur_Grab = Player("Game\img\Cursor\Grab (static).png",1.5)
+Cur_Grab_Sprite = Cur_Grab.load_sprite()
+Cur_Grab_Surface = Cur_Grab.create_surface(50,50)
 
 
 
 
-t =0
+
+
 while True:
+    x,y = pygame.mouse.get_pos()
    
     screen.fill((150,100,50))
-
 
     if rotate_Right == True:
             idle_rotate += 226
@@ -76,13 +78,12 @@ while True:
 
         
     else:
+       Cursor_Sprite.set_alpha(255)
+       Cur_Grab_Sprite.set_alpha(0)
        Grab_Sprite.set_alpha(0)
        Prince_Sprite.set_alpha(255)
        grab_sfx.stop()
        
-       Curorgrab.set_alpha(0)
-       Curor_nutural.set_alpha(255)
-    
           
 
 
@@ -97,11 +98,16 @@ while True:
     screen.blit(Grab_Surface,Prince_location)
     Grab_Surface.fill((0,0,0,0))
    
-    
-
-    
    
-  
+    Cur_Grab_Surface.blit(Cur_Grab_Sprite,(0,0))
+    screen.blit(Cur_Grab_Surface,(x-10,y-10))
+    cursor_Grab_location = Cursor_natural.collider(x-10 ,y-10,50,50)
+    Cur_Grab_Surface.fill((0,0,0,0))
+   
+    Cursor_Surface.fill((0,0,0,0))
+    Cursor_Surface.blit(Cursor_Sprite,(0,0))
+    screen.blit(Cursor_Surface,(x-10,y-10))
+    cursor_location = Cursor_natural.collider(x-10 ,y-10,50,50)
     
     #---------------------------------------------------- Exit App
     for event in pygame.event.get():
@@ -163,24 +169,18 @@ while True:
               walk_state = True
               left =True
               walk_sfx.play()
-        
-        
-        
-
-
+    
         #---------------------------------------------------------------Grab/Mouse Controls
         if event.type == pygame.MOUSEBUTTONDOWN:
             Grabed = True
-            Curorgrab.set_alpha(255)
-            Curor_nutural.set_alpha(0)
-
+            Cursor_Sprite.set_alpha(0)
+            Cur_Grab_Sprite.set_alpha(255)
             if Prince_location.collidepoint(x,y):
                 print("Click")
                 sfx_1.play()
                 Grab_Player = True
                 grab_sfx.play()
 
-            
         if event.type == pygame.MOUSEBUTTONUP:
             print("Released")
             sfx_2.play()
@@ -188,15 +188,10 @@ while True:
             Grabed = False
             Grab_food = False
             Grab_Player = False
-    
-
 
     x,y = pygame.mouse.get_pos()
     
 #---------------------------------------------- cursor
-    screen.blit(Curor_nutural,(x -15,y-10))
-    screen.blit(Curorgrab,(x -15,y-10))
-
 
     clock.tick(32) 
     pygame.display.update()
