@@ -79,14 +79,15 @@ down = False
 
 Prince = Player("Game\img\spritesheet.png",1)
 Prince_Sprite = Prince.load_sprite()
+Prince_location = Prince.collider(100,80,130,80)
 Prince_Surface = Prince.create_surface()
-
+Animation = Prince.run_animation()
 
 t =0
 while True:
     Animation = Prince.run_animation()
-    Prince_Surface.blit(Prince_Sprite,(-120,-30),(Animation,0,400,200))
-    screen.blit(Prince_Surface,(0,0))
+    Prince_Surface.blit(Prince_Sprite,(-125,-30),(Animation,0,400,200))
+    screen.blit(Prince_Surface,Prince_location)
     Prince_Surface.fill((255,255,255))
    
 
@@ -120,53 +121,44 @@ while True:
              rotate_Right = False
              
         #---------------------------------------------------------------- Walk, WASD
-        if event.type == pygame.KEYDOWN:
-           if event.key == pygame.K_w:
-              walk_state = True
-              up = True
-              walk_sfx.play()
 
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_w:
              up = False
              walk_state = False
              walk_sfx.stop()
-
-        if event.type == pygame.KEYDOWN:
-           if event.key == pygame.K_s:
-              walk_state = True
-              down =True
-              walk_sfx.play()
-        if event.type == pygame.KEYUP:
             if event.key == pygame.K_s:
              down = False
              walk_state = False
              walk_sfx.stop()
-
+            if event.key == pygame.K_a:
+             Right = False
+             walk_state = False
+             walk_sfx.stop()
+            if event.key == pygame.K_d:
+             walk_state = False
+             left = False
+             walk_sfx.stop()
+             
         if event.type == pygame.KEYDOWN:
+           if event.key == pygame.K_w:
+                walk_state = True
+                up = True
+                walk_sfx.play()
+           if event.key == pygame.K_s:
+              walk_state = True
+              down =True
+              walk_sfx.play()
            if event.key == pygame.K_a:
               Right = True
               walk_state = True
               idle_rotate = 2486
               walk_sfx.play()
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_a:
-             Right = False
-             walk_state = False
-             walk_sfx.stop()
-
-        
-        if event.type == pygame.KEYDOWN:
            if event.key == pygame.K_d:
               walk_state = True
               left =True
-              
               walk_sfx.play()
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_d:
-             walk_state = False
-             left = False
-             walk_sfx.stop()
+        
         
         
 
