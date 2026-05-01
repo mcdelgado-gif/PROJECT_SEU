@@ -1,1 +1,1 @@
-Prince_Sprite.set_alpha(255)
+screen = pygame.display.set_mode((800, 800))

@@ -15,13 +15,14 @@ sfx_1 = pygame.mixer.Sound('Game\Sound\Sample_0014.wav')
 sfx_2 = pygame.mixer.Sound('Game\Sound\Sample_0015.wav')
 eat_sfx = pygame.mixer.Sound('Game\Sound\Yum_Eat.mp3')
 #---------Sprite Rotation-----------------------
-idle_rotate = 0
+idle_rotate = 0 #Frame 0
 #---------------------game states--------------
 walk_state = False
 rotate_Right = False
 rotate_left =False
 Grabed = False
 Grab_Player = False
+Grab_food = False
 Eaten = False
 #------------------------Sprites/Surfaces/Collision
 Prince = Player("Game\img\spritesheet.png",1)
@@ -39,9 +40,16 @@ Prince_Walk = Player("Game\img\walk.png",1)
 Prince_w_sprite = Prince_Walk.load_sprite()
 walk_surface = Prince_Walk.create_surface(165,150)
 
+Food = Player("Game\img\Food.png",0.04)
+Food_sprite = Food.load_sprite()
+Food_surface = Food.create_surface(50,50)
+Food_col = Food.collider(0,0,50,50)
+Food_surface.fill((0,0,0,0))
+
+
 Cursor_natural = Player("Game\img\Cursor\Press (static).png",1.5)
 Cursor_Sprite = Cursor_natural.load_sprite()
-Cursor_Surface = Cursor_natural.create_surface(50,50)
+Cursor_Surface = Cursor_natural.create_surface(50,56)
 
 Cur_Grab = Player("Game\img\Cursor\Grab (static).png",1.5)
 Cur_Grab_Sprite = Cur_Grab.load_sprite()
@@ -50,7 +58,6 @@ Cur_Grab_Surface = Cur_Grab.create_surface(50,50)
 
 while True:
     x,y = pygame.mouse.get_pos()
-   
     screen.fill((150,100,50))
 #--------PLAYER Rotation---------
     if rotate_Right == True:
@@ -63,11 +70,11 @@ while True:
                 idle_rotate -= 226
     if idle_rotate == 3616:
             idle_rotate = 0
-
-#------Grab Logic---------------
+#-----If Player is grabbed---------------
     if Grabed == True:
+       offset = 86
        if Grab_Player == True:
-        Prince_location.x = x - 86
+        Prince_location.x = x -offset
         Prince_location. y = y
         Grab_Sprite.set_alpha(255)
         Prince_Sprite.set_alpha(0)
@@ -77,32 +84,44 @@ while True:
        Cur_Grab_Sprite.set_alpha(0)
        Grab_Sprite.set_alpha(0)
        grab_sfx.stop()
-       
+# If food is grabbed
+    if Grab_food:
+            Grab_Player = False
+            Food_col.x = x 
+            Food_col.y = y
+    if Eaten:
+        eat_sfx.play()
+        Eaten = False
+    #---idle ---
     Animation = Prince.run_animation()
     Prince_Surface.blit(Prince_Sprite,(-125,-30),(Animation,idle_rotate,400,200))
     screen.blit(Prince_Surface,Prince_location)
     Prince_Surface.fill((0,0,0,0))
-    
+    # ---pickup--
     Grab_Animation = Prince_Grab.run_animation()
     Grab_Surface.blit(Grab_Sprite,(-180,-65),(Grab_Animation,0,430,1000))
     screen.blit(Grab_Surface,Prince_location)
     Grab_Surface.fill((0,0,0,0))
-   
+   # ---walk--
     walk_surface.blit(Prince_w_sprite,(-125,-30),(Animation,idle_rotate,400,200))
     screen.blit(walk_surface,Prince_location)
     walk_surface.fill((0,0,0,0))
     Prince_w_sprite.set_alpha(0)
+#--- food---
+    Food_surface.blit(Food_sprite,(0,0),(0,0,400,400))
+    screen.blit(Food_surface,Food_col)
 
+# ---cur grab---
     Cur_Grab_Surface.blit(Cur_Grab_Sprite,(0,0))
     screen.blit(Cur_Grab_Surface,(x-10,y-10))
     cursor_Grab_location = Cursor_natural.collider(x-10 ,y-10,50,50)
     Cur_Grab_Surface.fill((0,0,0,0))
-   
+   #cur nutrual
     Cursor_Surface.fill((0,0,0,0))
     Cursor_Surface.blit(Cursor_Sprite,(0,0))
     screen.blit(Cursor_Surface,(x-10,y-10))
     cursor_location = Cursor_natural.collider(x-10 ,y-10,50,50)
-
+    #
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         Prince_location.y -= 10
@@ -129,11 +148,11 @@ while True:
         Prince_w_sprite.set_alpha(0)
         Prince_Sprite.set_alpha(255)
 
-    #---------------------------------------------------- Exit App
+    #---------------------------------------------------- Exit App Event
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit( )
-        #---------------------------------------------------- Arrow Keys
+        #---------------------------------------------------- Arrow Keys Event
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 rotate_left = True
@@ -148,7 +167,7 @@ while True:
             if event.key == pygame.K_RIGHT:
              rotate_Right = False
              print(rotate_Right)
-        #---------------------------------------------------------------- Walk, WASD
+        #---------------------------------------------------------------- Walk event/ play sound effect
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 walk_sfx.play()
@@ -160,18 +179,20 @@ while True:
                 walk_sfx.play()
         if event.type == pygame.KEYUP:
                 walk_sfx.stop()
-            
-    
-        #---------------------------------------------------------------Grab/Mouse Controls
+        #---------------------------------------------------------------Grab event/Mouse Controls
         if event.type == pygame.MOUSEBUTTONDOWN:
             Grabed = True
             Cursor_Sprite.set_alpha(0)
             Cur_Grab_Sprite.set_alpha(255)
             if Prince_location.collidepoint(x,y):
-                print("Click")
                 sfx_1.play()
                 Grab_Player = True
                 grab_sfx.play()
+            if Food_col.collidepoint(x,y):
+                Grab_food = True
+        if Prince_location.colliderect(Food_col):
+            Food_col.x = 1000
+            Eaten = True
         if event.type == pygame.MOUSEBUTTONUP:
             print("Released")
             sfx_2.play()
@@ -181,6 +202,7 @@ while True:
             Grab_food = False
 
 
-    clock.tick(32) 
-    pygame.display.update()
     pygame.display.flip()
+    clock.tick(32) 
+   
+
