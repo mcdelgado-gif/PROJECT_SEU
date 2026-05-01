@@ -5,4 +5,7 @@ Controls
 - Left and right arrow keys to rotate sprite
 # Install Dependencies
 ``` bash
-pip install -r requirements.txt   
+git clone https://github.com/mcdelgado-gif/PROJECT_SEU.git
+```
+```
+pip install -r requirements.txt
