@@ -2,6 +2,12 @@ import pygame
 from SPrite import Player 
 pygame.init()
 
+#Citations
+#https://www.pygame.org/docs/ #pygame documentation
+#https://www.youtube.com/watch?v=M6e3_8LHc7A&t=548s took insparation for encapulating my code, did not use direct code/copy paste
+#https://www.youtube.com/watch?v=AY9MnQ4x3zk&t=5236s used to learn how pygame works, syntax
+#https://www.youtube.com/watch?v=Hujzny-gkEk player input 
+
 #---Config------
 bg = (50,130,200)
 screen = pygame.display.set_mode((800, 800))
